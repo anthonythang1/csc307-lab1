@@ -33,7 +33,15 @@ const deleteUserById = (id) => {
 };
 
 const addUser = (user) => {
+  user.id = generateId();
   users["users_list"].push(user);
+  return true;
+};
+
+const generateId = () => {
+  return (
+    "id" + Date.now().toString(36) + Math.random().toString(36).substring(2, 15)
+  );
 };
 
 app.get("/", (req, res) => {
@@ -66,8 +74,11 @@ app.delete("/users/:id", (req, res) => {
 
 app.post("/users", (req, res) => {
   const userToAdd = req.body;
-  addUser(userToAdd);
-  res.status(201).send();
+  if (addUser(userToAdd)) {
+    res.status(201).send(userToAdd);
+  } else {
+    res.status(500).send("Failed to add user.");
+  }
 });
 
 app.listen(port, () => {
