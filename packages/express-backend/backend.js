@@ -32,6 +32,10 @@ const deleteUserById = (id) => {
   return false;
 };
 
+const addUser = (user) => {
+  users["users_list"].push(user);
+};
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
@@ -58,6 +62,12 @@ app.delete("/users/:id", (req, res) => {
   } else {
     res.status(404).send("Resource not found.");
   }
+});
+
+app.post("/users", (req, res) => {
+  const userToAdd = req.body;
+  addUser(userToAdd);
+  res.status(201).send();
 });
 
 app.listen(port, () => {
